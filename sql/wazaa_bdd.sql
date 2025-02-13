@@ -85,7 +85,7 @@ INSERT INTO waz_utilisateurs (ut_email,ut_mdp,tp_ut_id) values ('clara.balade@te
 CREATE TABLE waz_annonces(
    an_id INT AUTO_INCREMENT,
    an_numero VARCHAR(50)  NOT NULL,
-   an_pieces VARCHAR(50),
+   an_pieces INT NOT NULL,
    an_vue INT NOT NULL,
    an_ref VARCHAR(10)  NOT NULL,
    an_titre VARCHAR(200)  NOT NULL,

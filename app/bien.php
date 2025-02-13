@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <p class="card-text"><strong>Prix :</strong> <?= $annonce['an_prix'] ?>€</p>
             <p class="card-text"><strong>Date d'ajout :</strong> <?= $annonce['an_d_ajout'] ?></p>
             <?php if ($isAdmin): ?>
-                <form action="admin.php" method="POST">
+                <form action="modifier.php" method="POST">
                     <input type="hidden" name="an_id" value="<?= $annonce['an_id'] ?>">
                     <button type="submit" class="btn btn-primary">Modifier</button>
                 </form>
