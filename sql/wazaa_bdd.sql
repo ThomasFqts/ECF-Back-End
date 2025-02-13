@@ -55,6 +55,21 @@ INSERT INTO waz_type_bien (tp_bn_libelle) values
 ('Locaux professionnels'),
 ('Bureaux');
 
+CREATE TABLE waz_diagnostic(
+   d_id INT AUTO_INCREMENT,
+   d_libelle VARCHAR(5)  NOT NULL,
+   PRIMARY KEY(d_id)
+);
+
+INSERT INTO waz_diagnostic (d_libelle) VALUES
+('A'),
+('B'),
+('C'),
+('D'),
+('E'),
+('F'),
+('G');
+
 CREATE TABLE waz_utilisateurs(
    ut_id INT AUTO_INCREMENT,
    ut_email VARCHAR(100)  NOT NULL,
@@ -69,47 +84,52 @@ INSERT INTO waz_utilisateurs (ut_email,ut_mdp,tp_ut_id) values ('clara.balade@te
 
 CREATE TABLE waz_annonces(
    an_id INT AUTO_INCREMENT,
-   an_numero INT,
-   an_pieces INT,
+   an_numero VARCHAR(50)  NOT NULL,
+   an_pieces VARCHAR(50),
    an_vue INT NOT NULL,
    an_ref VARCHAR(10)  NOT NULL,
    an_titre VARCHAR(200)  NOT NULL,
-   an_description VARCHAR(100)  NOT NULL,
+   an_description VARCHAR(5000)  NOT NULL,
    an_local VARCHAR(100)  NOT NULL,
-   an_surf_hab INT,
-   an_surf_tot INT NOT NULL,
-   an_prix INT NOT NULL,
-   an_diagnostic VARCHAR(1)  NOT NULL,
+   an_surf_hab DECIMAL(15,2)  ,
+   an_surf_tot DECIMAL(15,2)   NOT NULL,
+   an_prix DECIMAL(15,2)   NOT NULL,
    an_d_ajout DATE NOT NULL,
-   an_d_modif DATE,
+   an_d_modif DATETIME,
    an_etat BOOLEAN NOT NULL,
+   d_id INT NOT NULL,
    ut_id INT NOT NULL,
    tp_bn_id INT,
    tp_ofr_id INT NOT NULL,
    PRIMARY KEY(an_id),
+   FOREIGN KEY(d_id) REFERENCES waz_diagnostic(d_id),
    FOREIGN KEY(ut_id) REFERENCES waz_utilisateurs(ut_id),
    FOREIGN KEY(tp_bn_id) REFERENCES waz_type_bien(tp_bn_id),
    FOREIGN KEY(tp_ofr_id) REFERENCES waz_type_offre(tp_ofr_id)
 );
 
-INSERT INTO waz_annonces (an_pieces,an_vue,an_ref,an_titre,an_description,an_local,an_surf_hab,an_surf_tot,an_prix,an_diagnostic,an_d_ajout,an_etat,ut_id,tp_ofr_id) 
-values (5,0,'20A100','100 km de Paris, Appartement 85m2 avec jardin','Exclusivité : dans bourg tous commerces avec écoles, maison d\'environ 85m2 habitables, mitoyenne, offrant en rez-de-chaussée, une cuisine aménagée, un salon-séjour, un WC et une loggia et à l\'étage, 3 chambres dont 2 avec placard, salle de bains et WC séparé. 2 garages. Le tout sur une parcelle de 225m2. Chauffage individuel clim réversible, DPE : F. ',
-'1h00 de Paris',85,225,197000,'F','2020-11-13',TRUE,1,1);
+INSERT INTO waz_annonces (an_numero, an_pieces,an_vue,an_ref,an_titre,an_description,an_local,an_surf_hab,an_surf_tot,an_prix,an_d_ajout,an_etat,d_id,ut_id,tp_ofr_id) 
+values ('AN0001','5',0,'20A100','100 km de Paris, Appartement 85m2 avec jardin','Exclusivité : dans bourg tous commerces avec écoles, maison d\'environ 85m2 habitables, mitoyenne, offrant en rez-de-chaussée, une cuisine aménagée, un salon-séjour, un WC et une loggia et à l\'étage, 3 chambres dont 2 avec placard, salle de bains et WC séparé. 2 garages. Le tout sur une parcelle de 225m2. Chauffage individuel clim réversible, DPE : F. ',
+'1h00 de Paris',85,225,197000,'2020-11-13',TRUE,6,1,1);
 
-INSERT INTO waz_annonces (an_pieces,an_vue,an_ref,an_titre,an_description,an_local,an_surf_hab,an_surf_tot,an_prix,an_diagnostic,an_d_ajout,an_etat,ut_id,tp_ofr_id) 
-values (3,0,'40C015','25 km de Bordeau, Appartement 55m2','Tous commerces avec écoles à - de 1km, appartement d\'environ 55m2 habitables, une cuisine aménagée, un salon-séjour, une chambre avec WC. Chauffage individuel clim réversible, DPE : F. ',
-'2h30 de Toulouse',55,70,100000,'F','2020-11-13',TRUE,1,2);
+
+INSERT INTO waz_annonces (an_numero,an_pieces,an_vue,an_ref,an_titre,an_description,an_local,an_surf_hab,an_surf_tot,an_prix,an_d_ajout,an_etat,d_id,ut_id,tp_ofr_id) 
+values ('AN0001','3',0,'40C015','25 km de Bordeau, Appartement 55m2','Tous commerces avec écoles à - de 1km, appartement d\'environ 55m2 habitables, une cuisine aménagée, un salon-séjour, une chambre avec WC. Chauffage individuel clim réversible, DPE : F. ',
+'2h30 de Toulouse',55,70,100000,'2020-11-13',TRUE,5,1,2);
 /*
 DROP TRIGGER IF EXISTS `tr_generate_num_annonce`;
 DELIMITER $$
-CREATE TRIGGER `tr_generate_num_annonce` BEFORE INSERT ON `waz_annonces` FOR EACH ROW BEGIN
+CREATE TRIGGER `tr_generate_num_commande` BEFORE INSERT ON `waz_annonces` FOR EACH ROW BEGIN
+    DECLARE prefix CHAR(3) DEFAULT 'AN';
     DECLARE num INT;
 
     SELECT COUNT(*) INTO num FROM waz_annonces;
     SET num = num + 1;
-    SET NEW.an_numero = num;
+
+    SET NEW.an_numero = CONCAT(prefix, LPAD(num, 0, '1'));
 END
 $$
+DELIMITER ;
 */
 CREATE TABLE waz_photo(
    ft_id INT AUTO_INCREMENT,

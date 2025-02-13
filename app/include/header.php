@@ -20,7 +20,7 @@ function ConnexionBase()
 $db = ConnexionBase(); // Connexion à la base de données
 
 // Vérifie si l'utilisateur est connecté
-$username = null;
+$email = null;
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
     $userTypeS = $_SESSION['user_type'];
@@ -31,8 +31,12 @@ if (isset($_SESSION['user_id'])) {
     $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        $ut_email = $user['ut_email'];
+        $email = $user['ut_email'];
     }
+} else {
+    // Défini le rôle d'utilisateur comme "Invité" si l'utilisateur n'est pas connecté
+    $_SESSION['user_type'] = 'Invite';
+    $_SESSION['user_id'] = null;
 }
 
 // Vérifie si l'utilisateur est admin
@@ -52,14 +56,13 @@ $isAdmin = isset($_SESSION['user_type']) && in_array($_SESSION['user_type'], ['A
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
+            <a class="navbar-brand" href="../app/index.php">Accueil</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active navbar-brand" aria-current="page" href="#">Home</a>
-                    </li>
-                </ul>
                 <div class="d-flex">
-                    <?php if ($username): ?>
+                    <?php if ($email): ?>
                         <a class="" aria-current="page" href="./login/deconnexion.php">Deconnexion</a>
                     <?php else: ?>
                         <a href="./login/connexion.php" class="">Connexion</a>

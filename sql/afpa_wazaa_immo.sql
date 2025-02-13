@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 12 fév. 2025 à 16:47
+-- Généré le : jeu. 13 fév. 2025 à 16:25
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -32,20 +32,20 @@ USE `afpa_wazaa_immo`;
 DROP TABLE IF EXISTS `waz_annonces`;
 CREATE TABLE `waz_annonces` (
   `an_id` int(11) NOT NULL,
-  `an_numero` int(11) DEFAULT NULL,
-  `an_pieces` int(11) DEFAULT NULL,
+  `an_numero` varchar(50) NOT NULL,
+  `an_pieces` varchar(50) DEFAULT NULL,
   `an_vue` int(11) NOT NULL,
   `an_ref` varchar(10) NOT NULL,
   `an_titre` varchar(200) NOT NULL,
-  `an_description` varchar(100) NOT NULL,
+  `an_description` varchar(5000) NOT NULL,
   `an_local` varchar(100) NOT NULL,
-  `an_surf_hab` int(11) DEFAULT NULL,
-  `an_surf_tot` int(11) NOT NULL,
-  `an_prix` int(11) NOT NULL,
-  `an_diagnostic` varchar(1) NOT NULL,
+  `an_surf_hab` decimal(15,2) DEFAULT NULL,
+  `an_surf_tot` decimal(15,2) NOT NULL,
+  `an_prix` decimal(15,2) NOT NULL,
   `an_d_ajout` date NOT NULL,
-  `an_d_modif` date DEFAULT NULL,
+  `an_d_modif` datetime DEFAULT NULL,
   `an_etat` tinyint(1) NOT NULL,
+  `d_id` int(11) NOT NULL,
   `ut_id` int(11) NOT NULL,
   `tp_bn_id` int(11) DEFAULT NULL,
   `tp_ofr_id` int(11) NOT NULL
@@ -55,9 +55,9 @@ CREATE TABLE `waz_annonces` (
 -- Déchargement des données de la table `waz_annonces`
 --
 
-INSERT INTO `waz_annonces` (`an_id`, `an_numero`, `an_pieces`, `an_vue`, `an_ref`, `an_titre`, `an_description`, `an_local`, `an_surf_hab`, `an_surf_tot`, `an_prix`, `an_diagnostic`, `an_d_ajout`, `an_d_modif`, `an_etat`, `ut_id`, `tp_bn_id`, `tp_ofr_id`) VALUES
-(1, NULL, 5, 0, '20A100', '100 km de Paris, Appartement 85m2 avec jardin', 'Exclusivité : dans bourg tous commerces avec écoles, maison d\'environ 85m2 habitables, mitoyenne, of', '1h00 de Paris', 85, 225, 197000, 'F', '2020-11-13', NULL, 1, 1, NULL, 1),
-(2, NULL, 3, 0, '40C015', '25 km de Bordeau, Appartement 55m2', 'Tous commerces avec écoles à - de 1km, appartement d\'environ 55m2 habitables, une cuisine aménagée, ', '2h30 de Toulouse', 55, 70, 100000, 'F', '2020-11-13', NULL, 1, 1, NULL, 2);
+INSERT INTO `waz_annonces` (`an_id`, `an_numero`, `an_pieces`, `an_vue`, `an_ref`, `an_titre`, `an_description`, `an_local`, `an_surf_hab`, `an_surf_tot`, `an_prix`, `an_d_ajout`, `an_d_modif`, `an_etat`, `d_id`, `ut_id`, `tp_bn_id`, `tp_ofr_id`) VALUES
+(1, 'AN0001', '5', 0, '20A100', '100 km de Paris, Appartement 85m2 avec jardin', 'Exclusivité : dans bourg tous commerces avec écoles, maison d\'environ 85m2 habitables, mitoyenne, offrant en rez-de-chaussée, une cuisine aménagée, un salon-séjour, un WC et une loggia et à l\'étage, 3 chambres dont 2 avec placard, salle de bains et WC séparé. 2 garages. Le tout sur une parcelle de 225m2. Chauffage individuel clim réversible, DPE : F. ', '1h00 de Paris', 85.00, 225.00, 197000.00, '2020-11-13', NULL, 1, 6, 1, NULL, 1),
+(2, 'AN0001', '3', 0, '40C015', '25 km de Bordeau, Appartement 55m2', 'Tous commerces avec écoles à - de 1km, appartement d\'environ 55m2 habitables, une cuisine aménagée, un salon-séjour, une chambre avec WC. Chauffage individuel clim réversible, DPE : F. ', '2h30 de Toulouse', 55.00, 70.00, 100000.00, '2020-11-13', NULL, 1, 5, 1, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -229,6 +229,7 @@ INSERT INTO `waz_utilisateurs` (`ut_id`, `ut_email`, `ut_mdp`, `tp_ut_id`) VALUE
 --
 ALTER TABLE `waz_annonces`
   ADD PRIMARY KEY (`an_id`),
+  ADD KEY `d_id` (`d_id`),
   ADD KEY `ut_id` (`ut_id`),
   ADD KEY `tp_bn_id` (`tp_bn_id`),
   ADD KEY `tp_ofr_id` (`tp_ofr_id`);
@@ -332,9 +333,10 @@ ALTER TABLE `waz_utilisateurs`
 -- Contraintes pour la table `waz_annonces`
 --
 ALTER TABLE `waz_annonces`
-  ADD CONSTRAINT `waz_annonces_ibfk_1` FOREIGN KEY (`ut_id`) REFERENCES `waz_utilisateurs` (`ut_id`),
-  ADD CONSTRAINT `waz_annonces_ibfk_2` FOREIGN KEY (`tp_bn_id`) REFERENCES `waz_type_bien` (`tp_bn_id`),
-  ADD CONSTRAINT `waz_annonces_ibfk_3` FOREIGN KEY (`tp_ofr_id`) REFERENCES `waz_type_offre` (`tp_ofr_id`);
+  ADD CONSTRAINT `waz_annonces_ibfk_1` FOREIGN KEY (`d_id`) REFERENCES `waz_diagnostic` (`d_id`),
+  ADD CONSTRAINT `waz_annonces_ibfk_2` FOREIGN KEY (`ut_id`) REFERENCES `waz_utilisateurs` (`ut_id`),
+  ADD CONSTRAINT `waz_annonces_ibfk_3` FOREIGN KEY (`tp_bn_id`) REFERENCES `waz_type_bien` (`tp_bn_id`),
+  ADD CONSTRAINT `waz_annonces_ibfk_4` FOREIGN KEY (`tp_ofr_id`) REFERENCES `waz_type_offre` (`tp_ofr_id`);
 
 --
 -- Contraintes pour la table `waz_an_opt`
