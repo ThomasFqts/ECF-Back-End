@@ -7,7 +7,6 @@ if (isset($_SESSION['user_id'])) {
     $userType = $_SESSION['user_type'];
     $stmt = $db->prepare("SELECT * FROM waz_annonces wa
         JOIN waz_type_offre wto ON wa.tp_ofr_id = wto.tp_ofr_id
-        JOIN waz_photo wp ON wa.an_id = wp.an_id
         GROUP BY wa.an_id;");
     $stmt->execute();
     $annonces = $stmt->fetchAll();
@@ -38,7 +37,7 @@ $isAdmin = isset($_SESSION['user_type']) && in_array($_SESSION['user_type'], ['A
                         <h5 class="card-title"><?= $annonce['an_titre'] ?></h5>
 
                         <!-- Description de l'annonce -->
-                        <p class="card-text"><strong>Desccription : </strong> <?= $annonce['an_description'] ?></p>
+                        <p class="card-text"><strong>Description : </strong> <?= $annonce['an_description'] ?></p>
 
                         <!-- Nombre de pièce du bien -->
                         <p><strong>Nombre de pièce : </strong><?= $annonce['an_pieces'] ?></p>
@@ -57,6 +56,11 @@ $isAdmin = isset($_SESSION['user_type']) && in_array($_SESSION['user_type'], ['A
 
                         <!-- Date d'ajout de l'annonce -->
                         <p class="card-text"><strong>Date d'ajout :</strong> <?= $annonce['an_d_ajout'] ?></p>
+
+                        <?php if ($annonce['an_d_modif']): ?>
+                            <!-- Date de modification de l'annonce -->
+                            <p class="card-text"><strong>Date de modification :</strong> <?= $annonce['an_d_modif'] ?></p>
+                        <?php endif ?>
 
                         <!-- Formulaire de validation pour rediriger l'utilisateur sur la page avec tous les détails de l'annonce -->
                         <form action="bien.php" method="POST">

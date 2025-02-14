@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <!-- Formulaire d'ajout -->
 <article class="d-flex justify-content-center">
-    <form action="add.php" method="POST" class="form-control d-flex flex-column w-75">
+    <form action="admin/add.php" method="POST" class="form-control d-flex flex-column w-75">
         <!-- Contenu du formulaire -->
         <section class="d-flex flex-row justify-content-around align-items-center">
 
@@ -81,46 +81,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <!-- Nombre de pièce dans le bien -->
                 <article class="d-flex flex-column">
                     <strong><label for="an_pieces">Nombre de pièce : </label></strong>
-
-                    <!-- 1 Pièce -->
+                    <?php for ($i = 1; $i <= 6; $i++): ?>
+                        <article>
+                            <input type="radio" name="an_pieces" value="<?= $i; ?>">
+                            <label for=""><?= $i; ?> Pièce<?= $i > 1 ? 's' : ''; ?></label>
+                        </article>
+                    <?php endfor ?>
                     <article>
-                        <input type="radio" name="an_pieces" value="1">
-                        <label for="">1 Pièce</label>
-                    </article>
-
-                    <!-- 2 Pièces -->
-                    <article>
-                        <input type="radio" name="an_pieces" value="2">
-                        <label for="">2 Pièces</label>
-                    </article>
-
-                    <!-- 3 Pièces -->
-                    <article>
-                        <input type="radio" name="an_pieces" value="3">
-                        <label for="">3 Pièces</label>
-                    </article>
-
-                    <!-- 4 Pièces -->
-                    <article>
-                        <input type="radio" name="an_pieces" value="4">
-                        <label for="">4 Pièces</label>
-                    </article>
-
-                    <!-- 5 Pièces -->
-                    <article>
-                        <input type="radio" name="an_pieces" value="5">
-                        <label for="">5 Pièces</label>
-                    </article>
-
-                    <!-- 6 Pièces -->
-                    <article>
-                        <input type="radio" name="an_pieces" value="6">
-                        <label for="">6 Pièces</label>
-                    </article>
-
-                    <!-- +6 Pièces -->
-                    <article>
-                        <input type="radio" name="an_pieces" value="+6">
+                        <input type="radio" name="an_pieces" value="7">
                         <label for="">Plus de 6 pièces</label>
                     </article>
                 </article>
@@ -133,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <strong><label for="options">Options : </label></strong>
                     <?php foreach ($options as $option): ?>
                         <article>
-                            <input type="checkbox" name="option" value="<?= $option['opt_id'] ?>">
+                            <input type="checkbox" name="option[]" value="<?= $option['opt_id'] ?>">
                             <label for=""><?= $option['opt_libelle'] ?></label>
                         </article>
                     <?php endforeach ?>
@@ -155,6 +123,15 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     </article>
                 </article>
             </section>
+
+            <!-- Noms des photos -->
+            <article class="d-flex flex-column">
+                <strong><label for="photos">Noms des photos : </label></strong>
+                <div id="photo-fields">
+                    <input type="text" name="photos[]" placeholder="Nom de la photo">
+                </div>
+                <button type="button" id="add-photo-field" class="btn btn-secondary mt-2">Ajouter un nom de photo</button>
+            </article>
 
             <!-- Surface Habitable + Surface Total + Diagnostic + Localisation du bien + Prix du bien + Date d'ajout de l'annonce -->
             <section class="d-flex flex-column align-items-start">
@@ -207,5 +184,4 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         </section>
     </form>
 </article>
-
 <?php include 'include/footer.php'; ?>
