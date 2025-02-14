@@ -36,6 +36,10 @@ $isAdmin = isset($_SESSION['user_type']) && in_array($_SESSION['user_type'], ['A
                         <!-- Titre de l'annonce -->
                         <h5 class="card-title"><?= $annonce['an_titre'] ?></h5>
 
+                        <p><strong>Numéro annonce : </strong> <?= $annonce['an_numero'] ?></p>
+
+                        <p><strong>Référence annonce : </strong> <?= $annonce['an_ref'] ?></p>
+
                         <!-- Description de l'annonce -->
                         <p class="card-text"><strong>Description : </strong> <?= $annonce['an_description'] ?></p>
 

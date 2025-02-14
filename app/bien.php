@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $stmt = $db->prepare("SELECT * FROM waz_annonces wa
     JOIN waz_type_offre wto ON wa.tp_ofr_id = wto.tp_ofr_id
-    JOIN waz_photo wp ON wa.an_id = wp.an_id
     JOIN waz_diagnostic wd on wa.d_id = wd.d_id
     WHERE wa.an_id = ?
     GROUP BY wa.an_id;");

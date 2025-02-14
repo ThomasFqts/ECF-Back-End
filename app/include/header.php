@@ -73,6 +73,7 @@ $isAdmin = isset($_SESSION['user_type']) && in_array($_SESSION['user_type'], ['A
                             <a class="btn btn-primary" aria-current="page" href="./login/deconnexion.php">Deconnexion</a>
                         <?php else: ?>
                             <a class="btn btn-primary" href="./login/connexion.php" class="">Connexion</a>
+                            <a class="btn btn-primary" href="./login/inscription.php" class="">Inscription</a>
                         <?php endif ?>
                     </article>
 
