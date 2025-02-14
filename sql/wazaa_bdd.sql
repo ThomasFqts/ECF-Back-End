@@ -116,21 +116,21 @@ values ('AN0001','5',0,'20A100','100 km de Paris, Appartement 85m2 avec jardin',
 INSERT INTO waz_annonces (an_numero,an_pieces,an_vue,an_ref,an_titre,an_description,an_local,an_surf_hab,an_surf_tot,an_prix,an_d_ajout,an_etat,d_id,ut_id,tp_ofr_id) 
 values ('AN0001','3',0,'40C015','25 km de Bordeau, Appartement 55m2','Tous commerces avec écoles à - de 1km, appartement d\'environ 55m2 habitables, une cuisine aménagée, un salon-séjour, une chambre avec WC. Chauffage individuel clim réversible, DPE : F. ',
 '2h30 de Toulouse',55,70,100000,'2020-11-13',TRUE,5,1,2);
-/*
+
 DROP TRIGGER IF EXISTS `tr_generate_num_annonce`;
 DELIMITER $$
-CREATE TRIGGER `tr_generate_num_commande` BEFORE INSERT ON `waz_annonces` FOR EACH ROW BEGIN
-    DECLARE prefix CHAR(3) DEFAULT 'AN';
+CREATE TRIGGER `tr_generate_num_annonce` BEFORE INSERT ON `waz_annonces` FOR EACH ROW 
+BEGIN
+    DECLARE prefix CHAR(2) DEFAULT 'AN';
     DECLARE num INT;
 
-    SELECT COUNT(*) INTO num FROM waz_annonces;
-    SET num = num + 1;
+    SELECT COUNT(*) + 1 INTO num FROM waz_annonces;
 
-    SET NEW.an_numero = CONCAT(prefix, LPAD(num, 0, '1'));
+    SET NEW.an_numero = CONCAT(prefix, LPAD(num, 4, '0'));
 END
 $$
 DELIMITER ;
-*/
+
 CREATE TABLE waz_photo(
    ft_id INT AUTO_INCREMENT,
    ft_nom VARCHAR(50) NOT NULL,

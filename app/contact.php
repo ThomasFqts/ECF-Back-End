@@ -5,15 +5,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = htmlspecialchars($_POST['email']);
     $message = htmlspecialchars($_POST['message']);
 
-    // Validate inputs
+    // Vérification des champs
     if (!empty($name) && !empty($email) && !empty($message)) {
         // Envoi de l'email
-        $to = "ordre.tuple@example.com";
-        $subject = "Nous contacter";
-        $body = "Name: $name\nEmail: $email\nMessage: $message";
-        $headers = "De: $email";
+        $destinataire = "ordre.tuple@example.com";
+        $objet = "Nous contacter";
+        $corps = "Name: $name\nEmail: $email\nMessage: $message";
+        $entete = "De: $email";
 
-        if ($to && $subject && $body && $headers) {
+        if ($destinataire && $objet && $corps && $entete) {
             echo "Message envoyé avec succès!";
         } else {
             echo "Echec de l'envoi du message.";
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<h1>Contact Us</h1>
+<h1>Contactez nous !</h1>
 <form action="contact.php" method="post" class="form-control d-flex flex-column justify-content-center align-items-center">
     <article class="d-flex flex-row">
         <label for="name">Prénom:</label>

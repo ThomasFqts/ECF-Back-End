@@ -71,6 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <p class="card-text"><strong>Diagnostic :</strong> <?= $annonce['d_libelle'] ?></p>
             <p class="card-text"><strong>Prix :</strong> <?= $annonce['an_prix'] ?>€</p>
             <p class="card-text"><strong>Date d'ajout :</strong> <?= $annonce['an_d_ajout'] ?></p>
+            <?php if ($annonce['an_d_modif']): ?>
+                <!-- Date de modification de l'annonce -->
+                <p class="card-text"><strong>Date de modification :</strong> <?= $annonce['an_d_modif'] ?></p>
+            <?php endif ?>
             <?php if ($isAdmin): ?>
                 <form action="modifier.php" method="POST">
                     <input type="hidden" name="an_id" value="<?= $annonce['an_id'] ?>">

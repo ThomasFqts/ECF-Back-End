@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 </article>
             </section>
 
-            <!-- Les options + Etat de l'annonce (active ou non) -->
+            <!-- Les options + Etat de l'annonce (active ou non) + Noms des photos -->
             <section class="d-flex flex-column align-items-center">
                 <!-- Les options -->
                 <article class="d-flex flex-column">
@@ -122,16 +122,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                         <label for="an_etat">Desactiver</label>
                     </article>
                 </article>
-            </section>
 
-            <!-- Noms des photos -->
-            <article class="d-flex flex-column">
-                <strong><label for="photos">Noms des photos : </label></strong>
-                <div id="photo-fields">
-                    <input type="text" name="photos[]" placeholder="Nom de la photo">
-                </div>
-                <button type="button" id="add-photo-field" class="btn btn-secondary mt-2">Ajouter un nom de photo</button>
-            </article>
+                <!-- Noms des photos -->
+                <article class="d-flex flex-column">
+                    <strong><label for="photos">Noms des photos : </label></strong>
+                    <div id="photo-fields">
+                        <input type="text" name="photos[]" placeholder="Nom de la photo">
+                    </div>
+                    <button type="button" id="add-photo-field" class="btn btn-secondary mt-2">Ajouter un nom de photo</button>
+                </article>
+            </section>
 
             <!-- Surface Habitable + Surface Total + Diagnostic + Localisation du bien + Prix du bien + Date d'ajout de l'annonce -->
             <section class="d-flex flex-column align-items-start">
