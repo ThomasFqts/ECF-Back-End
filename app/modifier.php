@@ -36,12 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $stmt = $db->prepare("SELECT * FROM waz_diagnostic");
     $stmt->execute();
     $diagnostics = $stmt->fetchAll();
+
+    // Récupération des options sélectionnées
+    $stmt = $db->prepare("SELECT opt_id FROM waz_an_opt WHERE an_id = ?");
+    $stmt->execute([$an_id]);
+    $selected_options = $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
 ?>
 
 <!-- Formulaire modification -->
 <article class="d-flex justify-content-center">
-    <form action="admin/edit.php" method="post" class="form-control d-flex flex-column w-75">
+    <form action="admin/edit.php" method="POST" class="form-control d-flex flex-column w-75">
         <?php foreach ($annonces as $annonce): ?>
             <!-- Contenu du formulaire -->
             <section class="d-flex flex-row justify-content-around align-items-center">
@@ -51,27 +56,27 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <!-- Titre de l'annonce -->
                     <article class="d-flex flex-column">
                         <strong><label for="an_titre">Titre : </label></strong>
-                        <input type="text" name="an_titre" class="" placeholder="<?= $annonce['an_titre']; ?>">
+                        <input type="text" name="an_titre" class="" value="<?= $annonce['an_titre']; ?>">
                     </article>
 
                     <!-- Référence de l'annonce -->
                     <article class="d-flex flex-column">
                         <strong><label for="an_ref">Référence de l'annonce : </label></strong>
-                        <input type="text" name="an_ref" class="" placeholder="<?= $annonce['an_ref']; ?>">
+                        <input type="text" name="an_ref" class="" value="<?= $annonce['an_ref']; ?>">
                     </article>
 
                     <!-- Description de l'annonce -->
                     <article class="d-flex flex-column">
-                        <strong><label for="an_desc">Decsription : </label></strong>
-                        <input type="text" name="an_desc" class="" placeholder="<?= $annonce['an_description']; ?>">
+                        <strong><label for="an_desc">Description : </label></strong>
+                        <input type="text" name="an_desc" class="" value="<?= $annonce['an_description']; ?>">
                     </article>
 
-                    <!-- Typde de l'offre de l'annonce -->
+                    <!-- Type de l'offre de l'annonce -->
                     <article class="d-flex flex-column">
                         <strong><label for="type_offre">Type d'offre : </label></strong>
                         <?php foreach ($type_offre as $offre): ?>
                             <article>
-                                <input type="radio" name="type_offre" value="<?= $offre['tp_ofr_id']; ?>">
+                                <input type="radio" name="type_offre" value="<?= $offre['tp_ofr_id']; ?>" <?= $offre['tp_ofr_id'] == $annonce['tp_ofr_id'] ? 'checked' : ''; ?>>
                                 <label for=""><?= $offre['tp_ofr_libelle'] ?></label>
                             </article>
                         <?php endforeach ?>
@@ -83,57 +88,22 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                         <select name="type_bien" id="">
                             <option value="" selected disabled hidden>Quel est le type du bien ?</option>
                             <?php foreach ($type_bien as $bien): ?>
-                                <article>
-                                    <option value="<?= $bien['tp_bn_id'] ?>"><?= $bien['tp_bn_libelle'] ?></option>
-                                </article>
+                                <option value="<?= $bien['tp_bn_id'] ?>" <?= $bien['tp_bn_id'] == $annonce['tp_bn_id'] ? 'selected' : ''; ?>><?= $bien['tp_bn_libelle'] ?></option>
                             <?php endforeach ?>
                         </select>
-
                     </article>
 
                     <!-- Nombre de pièce dans le bien -->
                     <article class="d-flex flex-column">
                         <strong><label for="an_pieces">Nombre de pièce : </label></strong>
-
-                        <!-- 1 Pièce -->
+                        <?php for ($i = 1; $i <= 6; $i++): ?>
+                            <article>
+                                <input type="radio" name="an_pieces" value="<?= $i; ?>" <?= $annonce['an_pieces'] == $i ? 'checked' : ''; ?>>
+                                <label for=""><?= $i; ?> Pièce<?= $i > 1 ? 's' : ''; ?></label>
+                            </article>
+                        <?php endfor ?>
                         <article>
-                            <input type="radio" name="an_pieces" value="1">
-                            <label for="">1 Pièce</label>
-                        </article>
-
-                        <!-- 2 Pièces -->
-                        <article>
-                            <input type="radio" name="an_pieces" value="2">
-                            <label for="">2 Pièces</label>
-                        </article>
-
-                        <!-- 3 Pièces -->
-                        <article>
-                            <input type="radio" name="an_pieces" value="3">
-                            <label for="">3 Pièces</label>
-                        </article>
-
-                        <!-- 4 Pièces -->
-                        <article>
-                            <input type="radio" name="an_pieces" value="4">
-                            <label for="">4 Pièces</label>
-                        </article>
-
-                        <!-- 5 Pièces -->
-                        <article>
-                            <input type="radio" name="an_pieces" value="5">
-                            <label for="">5 Pièces</label>
-                        </article>
-
-                        <!-- 6 Pièces -->
-                        <article>
-                            <input type="radio" name="an_pieces" value="6">
-                            <label for="">6 Pièces</label>
-                        </article>
-
-                        <!-- +6 Pièces -->
-                        <article>
-                            <input type="radio" name="an_pieces" value="+6">
+                            <input type="radio" name="an_pieces" value="7" <?= $annonce['an_pieces'] == 7 ? 'checked' : ''; ?>>
                             <label for="">Plus de 6 pièces</label>
                         </article>
                     </article>
@@ -146,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                         <strong><label for="options">Options : </label></strong>
                         <?php foreach ($options as $option): ?>
                             <article>
-                                <input type="checkbox" name="option" value="<?= $option['opt_id'] ?>">
+                                <input type="checkbox" name="option[]" value="<?= $option['opt_id'] ?>" <?= in_array($option['opt_id'], $selected_options) ? 'checked' : ''; ?>>
                                 <label for=""><?= $option['opt_libelle'] ?></label>
                             </article>
                         <?php endforeach ?>
@@ -154,14 +124,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
                     <!-- Etat de l'annonce -->
                     <article class="d-flex flex-column">
-                        <strong><label for="options">Etat : </label></strong>
+                        <strong><label for="an_etat">Etat : </label></strong>
                         <article>
-                            <input type="radio" name="an_etat" value="1">
+                            <input type="radio" name="an_etat" value="1" <?= $annonce['an_etat'] == 1 ? 'checked' : ''; ?>>
                             <label for="an_etat">Actif</label>
                         </article>
                         <article>
-                            <input type="radio" name="an_etat" value="0">
-                            <label for="an_etat">Desactiver</label>
+                            <input type="radio" name="an_etat" value="0" <?= $annonce['an_etat'] == 0 ? 'checked' : ''; ?>>
+                            <label for="an_etat">Désactivé</label>
                         </article>
                     </article>
                 </section>
@@ -171,13 +141,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <!-- Surface Habitable -->
                     <article class="d-flex flex-column">
                         <strong><label for="surface_habitable">Surface habitable : </label></strong>
-                        <input type="text" name="surface_habitable" placeholder="<?= $annonce['an_surf_hab'] ?>">
+                        <input type="text" name="surface_habitable" value="<?= $annonce['an_surf_hab'] ?>">
                     </article>
 
                     <!-- Surface Total -->
                     <article class="d-flex flex-column">
                         <strong><label for="surface_total">Surface total : </label></strong>
-                        <input type="text" name="surface_total" placeholder="<?= $annonce['an_surf_tot'] ?>">
+                        <input type="text" name="surface_total" value="<?= $annonce['an_surf_tot'] ?>">
                     </article>
 
                     <!-- Diagnostic -->
@@ -185,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                         <strong><label for="diagnostic">Diagnostic : </label></strong>
                         <?php foreach ($diagnostics as $diagnostic): ?>
                             <article>
-                                <input type="radio" name="diagnostic" value="<?= $diagnostic['d_id'] ?>">
+                                <input type="radio" name="diagnostic" value="<?= $diagnostic['d_id'] ?>" <?= $diagnostic['d_id'] == $annonce['d_id'] ? 'checked' : ''; ?>>
                                 <label for=""><?= $diagnostic['d_libelle'] ?></label>
                             </article>
                         <?php endforeach ?>
@@ -194,26 +164,26 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <!-- Localisation du bien -->
                     <article class="d-flex flex-column">
                         <strong><label for="an_loc">Localisation : </label></strong>
-                        <input type="text" name="an_loc" class="" placeholder="<?= $annonce['an_local']; ?>">
+                        <input type="text" name="an_loc" class="" value="<?= $annonce['an_local']; ?>">
                     </article>
 
                     <!-- Prix du bien -->
                     <article class="d-flex flex-column">
-                        <strong><label for="an_prix">Titre : </label></strong>
-                        <input type="text" name="an_prix" class="" placeholder="<?= $annonce['an_prix']; ?>€">
+                        <strong><label for="an_prix">Prix : </label></strong>
+                        <input type="text" name="an_prix" class="" value="<?= $annonce['an_prix']; ?>">
                     </article>
 
                     <!-- Date de modification -->
                     <article class="d-flex flex-column">
                         <strong><label for="date_modif">Date de modif : </label></strong>
-                        <input type="text" name="date_modif">
+                        <input type="text" name="date_modif" value="<?= $annonce['an_d_modif']; ?>">
                     </article>
                 </section>
             </section>
 
             <!-- Bouton de validation du formulaire -->
             <section class="d-flex justify-content-center">
-                <input type="hidden" name="an_id" value="<?= $annonce['an_id'] ?>">
+                <input type="hidden" name="an_id" value="<?= $an_id ?>">
                 <button type="submit" class="btn btn-success">Modifier</button>
             </section>
         <?php endforeach ?>

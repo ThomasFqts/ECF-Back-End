@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $stmt = $db->prepare("INSERT INTO waz_annonces(an_pieces, an_ref, an_titre, an_description, an_local, an_surf_hab, an_surf_tot, an_prix, an_d_modif, an_etat, d_id, tp_bn_id, tp_ofr_id) 
     VALUES  = (?,?,?,?,?,?,?,?,?,?,?,?,?);");
     $stmt->execute([$nbre_piece, $ref, $titre_annonce, $desc, $loc, $surf_hab, $surf_tot, $prix, $date_modif, $etat, $diagnostic, $type_bien, $type_offre]);
-    header("Location : index.php");
+    header("Location : ../index.php");
     exit();
 }
 ?>
