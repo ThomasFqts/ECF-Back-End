@@ -61,12 +61,22 @@ $isAdmin = isset($_SESSION['user_type']) && in_array($_SESSION['user_type'], ['A
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="d-flex">
-                    <?php if ($email): ?>
-                        <a class="" aria-current="page" href="./login/deconnexion.php">Deconnexion</a>
-                    <?php else: ?>
-                        <a href="./login/connexion.php" class="">Connexion</a>
-                    <?php endif ?>
+                <div class="d-flex justify-content-around">
+                    <article>
+                        <a href="./a_propos.php" class="btn btn-secondary">A propos</a>
+                </article>
+                    <article>
+                        <a href="./contact.php" class="btn btn-secondary">Contact</a>
+                </article>
+                    <article class="d-flex justify-content-end">
+                        <?php if ($email): ?>
+                            <a class="btn btn-primary" aria-current="page" href="./login/deconnexion.php">Deconnexion</a>
+                        <?php else: ?>
+                            <a class="btn btn-primary" href="./login/connexion.php" class="">Connexion</a>
+                        <?php endif ?>
+                    </article>
+
+
                 </div>
             </div>
         </div>
